@@ -1,10 +1,21 @@
 import datetime
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any
 import QuantLib as ql
 from mcp.server.fastmcp import FastMCP
 
 # Initialize FastMCP Server
 mcp = FastMCP("QuantLib Service")
+
+# 导出所有工具模块，供工具文件共享 mcp 实例
+__all__ = ['mcp', 'bonds', 'swaps', 'options', 'volatility', 'credit', 'money_market']
+
+# 导入所有工具模块（这些模块会使用上面的 mcp 实例注册工具）
+from .tools import bonds
+from .tools import swaps
+from .tools import options
+from .tools import volatility
+from .tools import credit
+from .tools import money_market
 
 # Helper function to parse ISO date strings
 def parse_date(date_str: str) -> ql.Date:
