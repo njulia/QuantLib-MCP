@@ -123,13 +123,62 @@ All tools are organized by category under `src/server/tools/`.
 | `build_deposit_futures_curve` | Build a short-end yield curve from deposits and futures |
 | `calculate_forward_rate` | Calculate forward rates |
 
-### Core Tools (`src/server/server.py`)
+### Yield Curves (`src/server/tools/curves.py`)
 
 | Tool | Description |
 |------|-------------|
-| `price_european_option` | Price a European option (legacy, in main server) |
-| `price_fixed_rate_bond` | Price a fixed-rate bond (legacy, in main server) |
-| `bootstrap_yield_curve` | Bootstrap a yield curve from market helpers |
+| `build_piecewise_flat_forward_curve` | Build a piecewise flat forward yield curve from market data |
+| `build_zero_coupon_curve` | Build a zero-coupon yield curve |
+| `build_discount_curve` | Build a discount curve from discount factors |
+| `build_forward_curve` | Build a forward rate curve |
+| `get_curve_rates` | Get rates at different tenors from a flat yield curve |
+| `calculate_discount_factor` | Calculate a discount factor |
+
+### Calendars & Schedules (`src/server/tools/calendars.py`)
+
+| Tool | Description |
+|------|-------------|
+| `list_holidays` | List holidays for a given calendar |
+| `check_business_day` | Check if a date is a business day |
+| `advance_date` | Advance a date by a number of days |
+| `business_days_between` | Calculate business days between two dates |
+| `create_schedule` | Create a payment schedule |
+| `adjust_date` | Adjust a date using business day conventions |
+| `list_available_calendars` | List all available calendars |
+| `calculate_year_fraction` | Calculate year fraction between dates |
+
+### Heston Model (`src/server/tools/heston.py`)
+
+| Tool | Description |
+|------|-------------|
+| `price_heston_european_option` | Price a European option using the Heston stochastic volatility model |
+| `price_heston_barrier_option` | Price a barrier option using Heston with finite differences |
+| `calibrate_heston_model` | Calibrate Heston model parameters to market option prices |
+| `generate_heston_volatility_surface` | Generate a Heston implied volatility surface |
+
+### Basket Options (`src/server/tools/basket.py`)
+
+| Tool | Description |
+|------|-------------|
+| `price_basket_option` | Price a basket option (Arithmetic/Geometric) |
+| `price_spread_option` | Price a spread option (Kirk approximation) |
+
+### FX & Quanto (`src/server/tools/fx.py`)
+
+| Tool | Description |
+|------|-------------|
+| `price_fx_vanilla_option` | Price an FX vanilla option (Garman-Kohlhagen model) |
+| `price_quanto_option` | Price a Quanto option |
+| `calculate_fx_forward_rate` | Calculate FX forward rate |
+| `create_fx_swap_curve` | Build an FX swap curve |
+
+### Asset Swaps (`src/server/tools/asset_swap.py`)
+
+| Tool | Description |
+|------|-------------|
+| `price_asset_swap` | Price an asset swap (fixed bond to floating) |
+| `price_equity_total_return_swap` | Price an equity total return swap |
+| `calculate_bond_z_spread` | Calculate bond Z-Spread |
 
 ---
 
@@ -173,7 +222,13 @@ quantlib-mcp/
 │   │   │   ├── options.py        # Option instruments
 │   │   │   ├── volatility.py     # Cap/Floor/Swaption
 │   │   │   ├── credit.py         # CDS and credit instruments
-│   │   │   └── money_market.py   # FRA, Deposit, Futures
+│   │   │   ├── money_market.py   # FRA, Deposit, Futures
+│   │   │   ├── curves.py         # Yield curve construction
+│   │   │   ├── calendars.py      # Calendars and schedules
+│   │   │   ├── heston.py         # Heston stochastic volatility
+│   │   │   ├── basket.py         # Basket and multi-asset options
+│   │   │   ├── fx.py             # FX and Quanto options
+│   │   │   └── asset_swap.py     # Asset swaps and Z-spread
 │   │   ├── server.py             # Main MCP server
 │   │   └── server_llm.py         # LLM-oriented server
 │   └── client/

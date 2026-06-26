@@ -7,7 +7,10 @@ from mcp.server.fastmcp import FastMCP
 mcp = FastMCP("QuantLib Service")
 
 # 导出所有工具模块，供工具文件共享 mcp 实例
-__all__ = ['mcp', 'bonds', 'swaps', 'options', 'volatility', 'credit', 'money_market']
+__all__ = [
+    'mcp', 'bonds', 'swaps', 'options', 'volatility', 'credit', 
+    'money_market', 'curves', 'calendars', 'heston', 'basket', 'fx', 'asset_swap'
+]
 
 # 导入所有工具模块（这些模块会使用上面的 mcp 实例注册工具）
 from .tools import bonds
@@ -16,6 +19,12 @@ from .tools import options
 from .tools import volatility
 from .tools import credit
 from .tools import money_market
+from .tools import curves
+from .tools import calendars
+from .tools import heston
+from .tools import basket
+from .tools import fx
+from .tools import asset_swap
 
 # Helper function to parse ISO date strings
 def parse_date(date_str: str) -> ql.Date:

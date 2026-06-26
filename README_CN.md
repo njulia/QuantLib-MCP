@@ -123,13 +123,62 @@ python -m src.server.server_llm
 | `build_deposit_futures_curve` | 使用存款和期货构建短期收益率曲线 |
 | `calculate_forward_rate` | 计算远期利率 |
 
-### 核心工具 (`src/server/server.py`)
+### 收益率曲线类 (`src/server/tools/curves.py`)
 
 | 工具 | 描述 |
 |------|------|
-| `price_european_option` | 欧式期权定价（遗留，在主服务器中） |
-| `price_fixed_rate_bond` | 固定利率债券定价（遗留，在主服务器中） |
-| `bootstrap_yield_curve` | 使用市场工具引导收益率曲线 |
+| `build_piecewise_flat_forward_curve` | 从市场数据构建分段常数远期曲线 |
+| `build_zero_coupon_curve` | 构建零息收益率曲线 |
+| `build_discount_curve` | 从贴现因子构建贴现曲线 |
+| `build_forward_curve` | 构建远期利率曲线 |
+| `get_curve_rates` | 获取曲线各期限利率 |
+| `calculate_discount_factor` | 计算贴现因子 |
+
+### 日历和计划类 (`src/server/tools/calendars.py`)
+
+| 工具 | 描述 |
+|------|------|
+| `list_holidays` | 列出指定日历的节假日 |
+| `check_business_day` | 检查是否为工作日 |
+| `advance_date` | 日期推进 |
+| `business_days_between` | 计算两个日期之间的工作日天数 |
+| `create_schedule` | 创建付息计划 |
+| `adjust_date` | 使用营业日调整规则调整日期 |
+| `list_available_calendars` | 列出所有可用日历 |
+| `calculate_year_fraction` | 计算两个日期之间的年分数 |
+
+### Heston 模型类 (`src/server/tools/heston.py`)
+
+| 工具 | 描述 |
+|------|------|
+| `price_heston_european_option` | 使用 Heston 随机波动率模型定价欧式期权 |
+| `price_heston_barrier_option` | 使用有限差分方法在 Heston 模型下定价障碍期权 |
+| `calibrate_heston_model` | 校准 Heston 模型参数到市场期权价格 |
+| `generate_heston_volatility_surface` | 生成 Heston 隐含波动率曲面 |
+
+### 篮子期权类 (`src/server/tools/basket.py`)
+
+| 工具 | 描述 |
+|------|------|
+| `price_basket_option` | 篮子期权定价（算术/几何平均） |
+| `price_spread_option` | 价差期权定价（Kirk 近似） |
+
+### 外汇和 Quanto 类 (`src/server/tools/fx.py`)
+
+| 工具 | 描述 |
+|------|------|
+| `price_fx_vanilla_option` | 外汇期权定价（Garman-Kohlhagen 模型） |
+| `price_quanto_option` | Quanto 期权定价 |
+| `calculate_fx_forward_rate` | 计算外汇远期汇率 |
+| `create_fx_swap_curve` | 构建外汇互换曲线 |
+
+### 资产互换类 (`src/server/tools/asset_swap.py`)
+
+| 工具 | 描述 |
+|------|------|
+| `price_asset_swap` | 资产互换定价（固定债券转浮动） |
+| `price_equity_total_return_swap` | 股票总收益互换定价 |
+| `calculate_bond_z_spread` | 计算债券 Z-Spread |
 
 ---
 
@@ -173,7 +222,13 @@ quantlib-mcp/
 │   │   │   ├── options.py        # 期权类工具
 │   │   │   ├── volatility.py     # Cap/Floor/Swaption
 │   │   │   ├── credit.py         # CDS 和信用类工具
-│   │   │   └── money_market.py   # FRA、存款、期货
+│   │   │   ├── money_market.py   # FRA、存款、期货
+│   │   │   ├── curves.py         # 收益率曲线构建
+│   │   │   ├── calendars.py      # 日历和付息计划
+│   │   │   ├── heston.py         # Heston 随机波动率
+│   │   │   ├── basket.py         # 篮子期权和多资产
+│   │   │   ├── fx.py             # 外汇和 Quanto 期权
+│   │   │   └── asset_swap.py     # 资产互换和 Z-Spread
 │   │   ├── server.py             # 主 MCP 服务器
 │   │   └── server_llm.py         # 面向 LLM 的服务器
 │   └── client/
